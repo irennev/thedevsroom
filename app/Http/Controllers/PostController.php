@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        error_log($posts);
+        //error_log($posts);
         return view('index', compact('posts'));
     }
 
@@ -78,4 +78,5 @@ class PostController extends Controller
 
         return view('show', compact('post'));
     }
+
 }

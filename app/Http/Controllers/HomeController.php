@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -38,6 +39,23 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        return view('admin');
+        $users = User::all();
+        $posts = Post::all();
+        $categories = Category::all();
+
+        return view('layouts/adminDashboard');
     }
+
+        /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function adminManagePosts()
+    {
+        $posts = Post::all();
+
+        return view('manageposts', compact('posts'));
+    }
+
 }

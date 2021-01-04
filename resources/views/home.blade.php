@@ -6,7 +6,26 @@
         <div class="col-lg">
             <div class="card">
                     @if(auth()->user()->is_admin == 1)
-                    <a href="{{url('admin/routes')}}">Admin</a>
+
+                    <section class="slice py-7">
+                    <div class="container">
+                        <div class="row row-grid align-items-center">
+                            <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center">
+                                <figure class="w-100"><img alt="Image placeholder" src="{{ asset('assets/images/admin-settings-male.png') }}" class="img-fluid mw-md-120"></figure>
+                            </div>
+                            <div class="col-12 col-md-7 col-lg-6 order-md-1 pr-md-5">
+                                <h1 class="display-4 text-center text-md-left mb-3">Hello, <strong class="text-primary">{{ Auth::user()->name }}</strong></h1>
+                                <div class="text-center text-md-left mt-5">
+                                <a href="{{route('admin.home')}}" class="btn btn-primary btn-icon">
+                                    <span class="btn-inner--text">Go to Dashboard</span> 
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+                    <br><br>
+
                     @else
 
                     <div class="container">
