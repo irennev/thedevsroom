@@ -28,6 +28,7 @@ class HomeController extends Controller
     {
         $posts = Post::all();
         $categories = Category::all();
+
         //error_log($posts);
         return view('home', compact('posts', 'categories'));
     }
@@ -44,18 +45,6 @@ class HomeController extends Controller
         $categories = Category::all();
 
         return view('layouts/adminDashboard');
-    }
-
-        /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function adminManagePosts()
-    {
-        $posts = Post::all();
-
-        return view('manageposts', compact('posts'));
     }
 
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<head>
+    <head>
     <title>Manage users</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -11,6 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
     <style>
     body {
         color: #404E67;
@@ -18,7 +19,7 @@
         font-family: 'Open Sans', sans-serif;
     }
     .table-wrapper {
-        width: 1000px;
+        width: 100%;
         margin: 30px auto;
         background: #fff;
         padding: 20px;	
@@ -95,60 +96,62 @@
     table.table td .add {
         display: none;
     }
+
+    /* Modal styles */
+    .modal .modal-dialog {
+        max-width: 1000px;
+    }
+    .modal .modal-header, .modal .modal-body, .modal .modal-footer {
+        padding: 20px 30px;
+    }
+    .modal .modal-content {
+        border-radius: 3px;
+        font-size: 14px;
+    }
+    .modal .modal-footer {
+        background: #ecf0f1;
+        border-radius: 0 0 3px 3px;
+    }
+    .modal .modal-title {
+        display: inline-block;
+    }
+    .modal .form-control {
+        border-radius: 2px;
+        box-shadow: none;
+        border-color: #dddddd;
+    }
+    .modal textarea.form-control {
+        resize: vertical;
+    }
+    .modal .btn {
+        border-radius: 2px;
+        min-width: 100px;
+    }	
+    .modal form label {
+        font-weight: normal;
+    }	
+
     </style>
     <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
         var actions = $("table td:last-child").html();
-        // Append table with add row form on add new button click
-        $(".add-new").click(function(){
-            $(this).attr("disabled", "disabled");
-            var index = $("table tbody tr:last-child").index();
-            var row = '<tr>' +
-                '<td><input type="text" class="form-control" name="name" id="name"></td>' +
-                '<td><input type="text" class="form-control" name="department" id="department"></td>' +
-                '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
-                '<td>' + actions + '</td>' +
-            '</tr>';
-            $("table").append(row);		
-            $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-        // Add row on add button click
-        $(document).on("click", ".add", function(){
-            var empty = false;
-            var input = $(this).parents("tr").find('input[type="text"]');
-            input.each(function(){
-                if(!$(this).val()){
-                    $(this).addClass("error");
-                    empty = true;
-                } else{
-                    $(this).removeClass("error");
-                }
-            });
-            $(this).parents("tr").find(".error").first().focus();
-            if(!empty){
-                input.each(function(){
-                    $(this).parent("td").html($(this).val());
-                });			
-                $(this).parents("tr").find(".add, .edit").toggle();
-                $(".add-new").removeAttr("disabled");
-            }		
-        });
-        // Edit row on edit button click
-        $(document).on("click", ".edit", function(){		
-            $(this).parents("tr").find("td:not(:last-child)").each(function(){
-                $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-            });		
-            $(this).parents("tr").find(".add, .edit").toggle();
-            $(".add-new").attr("disabled", "disabled");
-        });
-        // Delete row on delete button click
-        $(document).on("click", ".delete", function(){
-            $(this).parents("tr").remove();
-            $(".add-new").removeAttr("disabled");
-        });
     });
+
+    $(function(){
+    $('#editModal').modal({
+        keyboard: true,
+        backdrop: "static",
+        show:false,
+        
+    }).on('show', function(){
+          var title = $(event.target).closest('tr').data('title');
+
+        //make your ajax call populate items or what even you need
+        $(this).find('#orderDetails').html($('<b> Order Id selected: ' + getIdFromRow  + '</b>'))
+    });
+});
+
     </script>
 </head>
 
@@ -160,16 +163,17 @@
                             <div class="row">
                                 <div class="col-sm-8"><h2>Manage <b>Posts</b></h2></div>
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                                    <div class="search-box">
+                                        <input type="text" class="form-control" placeholder="Search&hellip;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <table class="table table-bordered">
+                        <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Title</th>
                                     <th>Body</th>
-                                    <th>User</th>
                                     <th>Category</th>
                                     <th>Visits</th>
                                     <th>Action</th>
@@ -181,22 +185,85 @@
                             @foreach($posts as $post)
                                 <tr>
                                     <td>{{ $post->title }}</td>
-                                    <td>{{ $post->title }}</td>
-                                    <td>{{ $post->user_id }}</td>
+                                    <td>{{ $post->body }}</td>
                                     <td>{{ $post->category_id }}</td>
                                     <td>{{ $post->visits }}</td>
                                     <td>
-                                        <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                                        <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                        <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+
+                                        <a href = "#modal-edit-{{ $post->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#modal-delete-{{ $post->id }}" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a>
+
+                                        
                                     </td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>     
+            </div>
+            
+            @foreach($posts as $post)
+            <!-- Edit Modal HTML -->
+            <div id="modal-edit-{{ $post->id }}" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('posts.update', $post->id) }}" method="post">
+                            @csrf @method('PUT')
+                            <div class="modal-header">						
+                                <h4 class="modal-title">Edit Post</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <input name="id" id="id" type="hidden" value ="{{$posts}}" required>					
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input name="title" id="title" type="text" class="form-control" value ="{{$post->title}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Body</label>
+                                    <textarea name="body" id="body" class="form-control" required>{{$post->body}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cadegory id</label>
+                                    <input name="category_id"  id="category_id" type="text" class="form-control" value ="{{$post->category_id}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Visits</label>
+                                    <input name="visits" type="text" class="form-control" value ="{{$post->visits}}" disabled>
+                                </div>					
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-info" value="Save">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete Modal HTML -->
+            <div id="modal-delete-{{ $post->id }}" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+                            @csrf @method('DELETE')
+                            <div class="modal-header">						
+                                <h4 class="modal-title">Delete Post</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">					
+                                <p>Are you sure you want to delete the "{{$post->title}}" article?</p>
+                                <p class="text-warning"><small>This action cannot be undone.</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-danger" value="Delete">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>             
+            @endforeach
+            
             </body>
 @endsection
