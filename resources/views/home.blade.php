@@ -31,9 +31,9 @@
                     <div class="container">
                         <br>
                         <div class="row justify-content-center">
-                            <br>
-                            <div class="col-md-8">
                             
+                            <div class="col-md-8">
+                            <br>
                                 <h1>Articles</h1>
                                 <a href="{{ route('posts.create') }}" class="btn btn-success" style="float: right">Create Article</a>
                                 <br><br><br>
@@ -81,7 +81,7 @@
                                         <div id="category-{{ $category->id}}" class="collapse" aria-labelledby="heading-{{ $category->id}}" data-parent="#accordion">
                                         <div class="card-body">
                                             <div class="list-group">
-                                                @foreach($category->posts as $post)
+                                                @foreach($category->posts->sortByDesc('visits')->take(3) as $post)
 
                                                 <a href="{{ route('posts.show', $post->id) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                                                 <h5 class="mb-1">{{ $post->title }}</h5>
@@ -99,6 +99,9 @@
 
                         </div>
                         <br>
+                    </div>
+                    <div class="pl-3">
+                    {{ $posts->render("pagination::bootstrap-4") }}
                     </div>
                     @endif
             </div>

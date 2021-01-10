@@ -11,6 +11,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     
     <link href="{{ asset('css/manage.css') }}" rel="stylesheet">
@@ -20,6 +21,18 @@
         $('[data-toggle="tooltip"]').tooltip();
         var actions = $("table td:last-child").html();
     });
+
+
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
+
+
     </script>
 </head>
 
@@ -32,7 +45,7 @@
                                 <div class="col-sm-8"><h2>Manage <b>Users</b></h2></div>
                                 <div class="col-sm-4">
                                     <div class="search-box">
-                                        <input type="text" class="form-control" placeholder="Search&hellip;">
+                                        <input id="myInput" type="text" class="form-control" placeholder="Search&hellip;">
                                     </div>
                                 </div>
                             </div>
@@ -48,7 +61,7 @@
                                 </tr>
                             </thead>
                             
-                            <tbody>
+                            <tbody id="myTable">
 
                             @foreach($users as $user)
                                 <tr>

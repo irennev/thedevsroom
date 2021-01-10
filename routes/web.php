@@ -34,8 +34,9 @@ Route::resource('categories', 'App\Http\Controllers\CategoryController');
 Route::resource('users', 'App\Http\Controllers\UserController');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/profile', [App\Http\Controllers\HomeController::class, 'userProfile'])->name('profile');
 Route::get('/home/search', [App\Http\Controllers\HomeController::class, 'search'])->name('search');
-Route::get('/home/search', [App\Http\Controllers\HomeController::class, 'searchInCategories'])->name('searchInCategories');
+
 
 
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Comment;
+
 
 class HomeController extends Controller
 {
@@ -26,8 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        $categories = Category::all();
+        $posts = Post::paginate(5);
+
+        $categories = Category::withCount('posts')->orderByDesc('posts_count')->get()->take(5);
 
         //error_log($posts);
         return view('home', compact('posts', 'categories'));
@@ -42,9 +45,35 @@ class HomeController extends Controller
     {
         $users = User::all();
         $posts = Post::all();
-        $categories = Category::all();
+        //$categories = Category::all();
 
-        return view('layouts/adminDashboard');
+        $categories = Category::withCount('posts')->orderByDesc('posts_count')->get()->take(5);
+
+        
+
+        $comments = Comment::all();
+
+        return view('dashboard', compact('users', 'posts', 'categories', 'comments'));
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function userProfile()
+    {
+        $users = User::all();
+        $posts = Post::all();
+        //$categories = Category::all();
+
+        $categories = Category::withCount('posts')->orderByDesc('posts_count')->get()->take(5);
+
+        
+
+        $comments = Comment::all();
+
+        return view('profile', compact('users', 'posts', 'categories', 'comments'));
     }
     
 

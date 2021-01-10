@@ -28,6 +28,8 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="list-group list-group-flush">
       <div class="sidebar-heading">The Devs Room </div>
+        <div class="list-group-item bg-light">Overview</div>
+        <a href="{{ route('admin.home') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Dashboard</i></a>
         <div class="list-group-item bg-light">Users</div>
         <a href="{{ route('manageusers') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Users</i></a>
         <div class="list-group-item bg-light">Posts & Comments</div>
