@@ -1,50 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
+
+<script>
+function showPosts() {
+    var x = document.getElementById("postsResults");
+    var y = document.getElementById("accordion");
+
+    x.style.display = "block";
+    y.style.display = "none";
+}
+
+function showCategories() {
+    var x = document.getElementById("postsResults");
+    var y = document.getElementById("accordion");
+
+    y.style.display = "block";
+    x.style.display = "none";
+}
+</script>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg">
             <div class="card">
-                    @if(auth()->user()->is_admin == 1)
-
-                    <section class="slice py-7">
                     <div class="container">
-                        <div class="row row-grid align-items-center">
-                            <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center">
-                                <figure class="w-100"><img alt="Image placeholder" src="{{ asset('assets/images/admin-settings-male.png') }}" class="img-fluid mw-md-120"></figure>
-                            </div>
-                            <div class="col-12 col-md-7 col-lg-6 order-md-1 pr-md-5">
-                                <h1 class="display-4 text-center text-md-left mb-3">Hello, <strong class="text-primary">{{ Auth::user()->name }}</strong></h1>
-                                <div class="text-center text-md-left mt-5">
-                                <a href="{{route('admin.home')}}" class="btn btn-primary btn-icon">
-                                    <span class="btn-inner--text">Go to Dashboard</span> 
-                                </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </section>
-                    <br><br>
-
-                    @else
-
-                    <div class="container">
-                        <br>
                         <div class="row justify-content-center">
-                            <br>
-                            <div class="col-md-8">
+                            <div class="col-md-12">
+                                <br>
+                                <h5>Results in:</h5>
+                                    <button onclick="showPosts()" class="btn btn-sm btn-outline-success mr-2" type="submit">Posts</button>
+                                    <button onclick="showCategories()" class="btn btn-sm btn-outline-success mr-2" type="submit">Categories</button>
+                                <br>
+                                <br>
+                                @if(count($posts)>0 && $search!="")
+                                <h5> The Search results for your query <b> {{ $search }} </b> are :</h5>
+                                <br>
+
                             
-                                <h1>Articles</h1>
-                                <a href="{{ route('posts.create') }}" class="btn btn-success" style="float: right">Create Article</a>
-                                <br><br><br>
-                                <div class="list-group">
+                                <div id="postsResults" class="list-group">
                                     @foreach($posts as $post)
 
                                     <a href="{{ route('posts.show', $post->id) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                                     <h5 class="mb-1">{{ $post->title }}</h5>
-                                    @inject('provider', 'App\Http\Controllers\ServiceProvider')
-                                    <small><i>Written by:</i> {{ $provider::getUser($post->user_id) }}</small>
-                                    <br>
                                     <small><i>{{ $post->visits}} views</i></small>
                                     <br><br>
                                     <h6>{{ substr($post->body, 0, 80) }}...</h6>
@@ -52,20 +50,11 @@
                                     
                                     @endforeach
                                 </div>
-                            </div>
-                            
-                            
-                            <div lass="col-sm" >
-                            </div>
-                            <br>
-                            <div class="col-sm-4 justify-content-center">
-                                <br>
-                                <h1>Categories</h1>
-                                <br><br><br>
 
-
-                                <div id="accordion">
-                                    @foreach($categories as $category)
+                                
+                                <div id="accordion" style ="display: none">
+                                
+                                @foreach($categories as $category)
                                     <div class="card">
                                         <div class="card-header" id="heading-{{ $category->id}}">
                                         <h5 class="mb-0">
@@ -90,19 +79,21 @@
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         </div>
                                     </div>
                                     @endforeach
                                 </div>
-                            </div>
 
+                                @else
+                                <h5> No results found for <b> {{ $search }} </b>.</h5>
+                                @endif
+                            </div>
                         </div>
                         <br>
                     </div>
-                    @endif
             </div>
         </div>
     </div>
 </div>
+
 @endsection

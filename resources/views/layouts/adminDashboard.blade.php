@@ -8,13 +8,14 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Simple Sidebar - Start Bootstrap Template</title>
+  <title>Admin Dashboard</title>
 
   <!-- Bootstrap core CSS -->
   <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="{{ asset('css/simple-sidebar.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -28,12 +29,12 @@
       <div class="list-group list-group-flush">
       <div class="sidebar-heading">The Devs Room </div>
         <div class="list-group-item bg-light">Users</div>
-        <a href="#" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Users</i></a>
+        <a href="{{ route('manageusers') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Users</i></a>
         <div class="list-group-item bg-light">Posts & Comments</div>
         <a href="{{ route('manageposts') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Posts</i></a>
-        <a href="#" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Comments</i></a>
+        <a href="{{ route('managecomments') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Comments</i></a>
         <div class="list-group-item bg-light">Categories</div>
-        <a href="#" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Categories</i></a>
+        <a href="{{ route('managecategories') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Categories</i></a>
       </div>
     </div>
 
@@ -75,7 +76,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
+                            document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
 

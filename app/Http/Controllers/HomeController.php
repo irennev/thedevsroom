@@ -46,5 +46,24 @@ class HomeController extends Controller
 
         return view('layouts/adminDashboard');
     }
+    
+
+    public function search(Request $request){
+        // Get the search value from the request
+        $search = $request->input('search');
+    
+        // Search in the title and body columns from the posts table
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('body', 'LIKE', "%{$search}%")
+            ->get();     
+
+        $categories = Category::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->get();
+    
+        // Return the search view with the resluts compacted
+        return view('searchPage', compact('posts', 'categories', 'search'));
+    }
 
 }

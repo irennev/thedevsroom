@@ -19,27 +19,22 @@ class CreateCategoriesSeeder extends Seeder
 
             [
                'name'=>'Artificial Intelligence',
-               'slug'=>'ai',
             ],
 
             [
                 'name'=>'Computational Complexity',
-                'slug'=>'cc',
             ],
 
             [
                 'name'=>'Cryptography and Security',
-                'slug'=>'cr',
             ],
 
             [
                 'name'=>'Data Structures and Algorithms',
-                'slug'=>'dsa',
             ],
             
             [
                 'name'=>'Databases',
-                'slug'=>'db',
             ],
         ];
 

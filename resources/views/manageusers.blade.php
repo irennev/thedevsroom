@@ -3,14 +3,16 @@
 @section('content')
 
     <head>
-    <title>Manage posts</title>
+    <title>Manage users</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    
     <link href="{{ asset('css/manage.css') }}" rel="stylesheet">
 
     <script>
@@ -27,7 +29,7 @@
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
-                                <div class="col-sm-8"><h2>Manage <b>Posts</b></h2></div>
+                                <div class="col-sm-8"><h2>Manage <b>Users</b></h2></div>
                                 <div class="col-sm-4">
                                     <div class="search-box">
                                         <input type="text" class="form-control" placeholder="Search&hellip;">
@@ -38,28 +40,26 @@
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Title</th>
-                                    <th>Body</th>
-                                    <th>Category</th>
-                                    <th>Visits</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Is Admin</th>
+                                    <th>No. Posts</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             
                             <tbody>
 
-                            @foreach($posts as $post)
+                            @foreach($users as $user)
                                 <tr>
-                                    <td>{{ $post->title }}</td>
-                                    <td>{{ $post->body }}</td>
-                                    <td>{{ $post->category_id }}</td>
-                                    <td>{{ $post->visits }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->is_admin }}</td>
+                                     @inject('provider', 'App\Http\Controllers\ServiceProvider')
+                                    <td>{{ $provider::userPosts($user->id) }}</td>
                                     <td>
-
-                                        <a href = "#modal-edit-{{ $post->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#modal-delete-{{ $post->id }}" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a>
-
-                                        
+                                        <a href ="#modal-edit-{{ $user->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#modal-delete-{{ $user->id }}" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -69,34 +69,35 @@
                 </div>
             </div>
             
-            @foreach($posts as $post)
+            @foreach($users as $user)
             <!-- Edit Modal HTML -->
-            <div id="modal-edit-{{ $post->id }}" class="modal fade">
+            <div id="modal-edit-{{ $user->id }}" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="{{ route('posts.update', $post->id) }}" method="post">
+                        <form action="{{ route('users.update', $user->id) }}" method="post">
                             @csrf @method('PUT')
                             <div class="modal-header">						
-                                <h4 class="modal-title">Edit Post</h4>
+                                <h4 class="modal-title">Edit User</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <input name="id" id="id" type="hidden" value ="{{$posts}}" required>					
+                                <input name="id" id="id" type="hidden" value ="{{$users}}" required>					
                                 <div class="form-group">
-                                    <label>Title</label>
-                                    <input name="title" id="title" type="text" class="form-control" value ="{{$post->title}}" required>
+                                    <label>Name</label>
+                                    <input name="name" id="name" type="text" class="form-control" value ="{{$user->name}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Body</label>
-                                    <textarea name="body" id="body" class="form-control" required>{{$post->body}}</textarea>
+                                    <label>Email</label>
+                                    <input name="email" id="email" type="text" class="form-control" value ="{{$user->email}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Cadegory id</label>
-                                    <input name="category_id"  id="category_id" type="text" class="form-control" value ="{{$post->category_id}}" required>
+                                    <label>Is Admin</label>
+                                    <input name="is_admin"  id="is_admin" type="text" class="form-control" value ="{{$user->is_admin}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Visits</label>
-                                    <input name="visits" type="text" class="form-control" value ="{{$post->visits}}" disabled>
+                                    <label>No. Posts</label>
+                                    @inject('provider', 'App\Http\Controllers\ServiceProvider')
+                                    <input name="nr_posts" type="text" class="form-control" value ="{{ $provider::userPosts($user->id) }}" disabled>
                                 </div>					
                             </div>
                             <div class="modal-footer">
@@ -108,17 +109,17 @@
                 </div>
             </div>
             <!-- Delete Modal HTML -->
-            <div id="modal-delete-{{ $post->id }}" class="modal fade">
+            <div id="modal-delete-{{ $user->id }}" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+                        <form action="{{ route('users.destroy', $user->id) }}" method="post">
                             @csrf @method('DELETE')
                             <div class="modal-header">						
-                                <h4 class="modal-title">Delete Post</h4>
+                                <h4 class="modal-title">Delete User</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">					
-                                <p>Are you sure you want to delete the "{{$post->title}}" article?</p>
+                                <p>Are you sure you want to delete "{{$user->name}}" user?</p>
                                 <p class="text-warning"><small>This action cannot be undone.</small></p>
                             </div>
                             <div class="modal-footer">
