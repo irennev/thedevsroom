@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Post;
+use App\Models\Comment;
 
 class ServiceProvider extends Controller
 {
@@ -23,16 +25,16 @@ class ServiceProvider extends Controller
 
     public static function categoryPosts($id)
     {
-        $categoryPostCount = Category::find($id)->posts()->count(); //Suggest:- it will return post counts along with user details
+        $categoryPostCount = Category::find($id)->posts()->count(); 
 
-        return $categoryPostCount; // or $userPosts
+        return $categoryPostCount; 
     }
 
     public static function tagPosts($id)
     {
-        $tagPostCount = Tag::find($id)->posts()->count(); //Suggest:- it will return post counts along with user details
+        $tagPostCount = Tag::find($id)->posts()->count(); 
 
-        return $tagPostCount; // or $userPosts
+        return $tagPostCount; 
     }
 
     
@@ -41,4 +43,21 @@ class ServiceProvider extends Controller
         return $userName;
     }
 
+    public static function getPost($id){
+        $postTitle = Post::find($id)->title;
+        return $postTitle;
+    }
+
+    public static function getComment($id){
+
+        $comment = Comment::find($id);
+
+        if($comment!=null){
+            return $comment->body;
+        }else{
+            return '-';
+        }
+
+        
+    }
 }

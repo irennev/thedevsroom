@@ -63,9 +63,10 @@
 
                             @foreach($comments as $comment)
                                 <tr>
-                                    <td>{{ $comment->user_id }}</td>
-                                    <td>{{ $comment->post_id }}</td>
-                                    <td>{{ $comment->parent_id }}</td>
+                                @inject('provider', 'App\Http\Controllers\ServiceProvider')
+                                    <td>{{ $provider::getUser($comment->user_id) }}</td>
+                                    <td>{{ $provider::getPost($comment->post_id) }}</td>
+                                    <td>{{ $provider::getComment($comment->parent_id) }}</td>
                                     <td>{{ $comment->body }}</td>
                                     <td>
                                         <a href ="#modal-edit-{{ $comment->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
@@ -86,6 +87,7 @@
                     <div class="modal-content">
                         <form action="{{ route('comments.update', $comment->id) }}" method="post">
                             @csrf @method('PUT')
+                            @inject('provider', 'App\Http\Controllers\ServiceProvider')
                             <div class="modal-header">						
                                 <h4 class="modal-title">Edit Comment</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -94,15 +96,15 @@
                                 <input name="id" id="id" type="hidden" value ="{{$comments}}" required>					
                                 <div class="form-group">
                                     <label>User</label>
-                                    <input name="user_id" id="user_id" type="text" class="form-control" value ="{{$comment->user_id}}" disabled>
+                                    <input name="user_id" id="user_id" type="text" class="form-control" value ="{{ $provider::getUser($comment->user_id) }}" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Post</label>
-                                    <input name="post_id" id="post_id" type="text" class="form-control" value ="{{$comment->post_id}}" disabled>
+                                    <input name="post_id" id="post_id" type="text" class="form-control" value ="{{ $provider::getPost($comment->post_id) }}" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Parent</label>
-                                    <input name="parent_id"  id="parent_id" type="text" class="form-control" value ="{{$comment->parent_id}}" disabled>
+                                    <input name="parent_id"  id="parent_id" type="text" class="form-control" value ="{{ $provider::getComment($comment->parent_id) }}" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Body</label>
