@@ -102,7 +102,7 @@
 
                                 <div class="justify-content-center pt-2">
                                 @foreach($tags as $tag)
-                                <a href="{{ route('tag', $tag) }}" class="badge badge-primary" style="font-size:1rem;">{{ $tag }}</a>
+                                <a href="{{ route('tag', $tag) }}" class="badge badge-primary mt-1 mb-1" style="font-size:1rem;">{{ $tag }}</a>
                                 @endforeach
                                 </div>
 
