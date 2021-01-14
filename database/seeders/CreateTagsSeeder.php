@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\Tag;
 
-class CreateCategoriesSeeder extends Seeder
+class CreateTagsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
