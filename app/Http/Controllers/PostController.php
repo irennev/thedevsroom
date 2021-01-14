@@ -49,7 +49,7 @@ class PostController extends Controller
     	$request->validate([
             'title'=>'required',
             'body'=>'required',
-            'category_id'=>'required|exists:categories,category_id',
+            'category_id'=>'required',
             'tagsList' => 'required'
         ]);
 
