@@ -48,6 +48,9 @@
                                     <small><i>{{ $post->visits}} views</i></small>
                                     <br><br>
                                     <h6>{{ substr($post->body, 0, 80) }}...</h6>
+                                    @foreach($post->tags as $tag)
+                                        <span class="badge badge-primary">{{ $tag->name }}</span>
+                                     @endforeach
                                     </a>
                                     
                                     @endforeach
@@ -90,13 +93,20 @@
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         </div>
                                     </div>
                                     @endforeach
                                 </div>
-                            </div>
 
+                                <h1 class="pt-4">Tags</h1>
+
+                                <div class="justify-content-center pt-2">
+                                @foreach($tags as $tag)
+                                <a href="{{ route('tag', $tag) }}" class="badge badge-primary" style="font-size:1rem;">{{ $tag }}</a>
+                                @endforeach
+                                </div>
+
+                            </div>
                         </div>
                         <br>
                     </div>

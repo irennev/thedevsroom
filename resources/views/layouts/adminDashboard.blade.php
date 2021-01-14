@@ -37,6 +37,8 @@
         <a href="{{ route('managecomments') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Comments</i></a>
         <div class="list-group-item bg-light">Categories</div>
         <a href="{{ route('managecategories') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Categories</i></a>
+        <div class="list-group-item bg-light">Tags</div>
+        <a href="{{ route('managetags') }}" class="list-group-item list-group-item-action bg-light" style="white-space:pre">&#9<i>Manage Tags</i></a>
       </div>
     </div>
 

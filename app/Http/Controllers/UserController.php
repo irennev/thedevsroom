@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Category;
+use Image;
 
 class UserController extends Controller
 {
@@ -30,10 +31,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         $request->validate([
-         'name' => 'required',
-         'email' => 'required',
-         'is_admin' => 'required',
+         'name' => 'required|regex:/^[\pL\s\-]+$/u',
+         'email' => 'required|string|email|max:255|unique:users,email,'.$id,
+         'is_admin' => 'required|digits_between:0,1'
         ]);
 
         $user = User::find($id);
@@ -63,6 +65,25 @@ class UserController extends Controller
         User::where('id', $id) -> delete();
 
         return redirect()->back()->with('success', 'Deleted');
+    }
+
+
+
+    public function update_avatar(Request $request){
+
+    	// Handle the user upload of avatar
+    	if($request->hasFile('avatar')){
+    		$avatar = $request->file('avatar');
+    		$filename = time() . '.' . $avatar->getClientOriginalExtension();
+    		Image::make($avatar)->resize(300, 300)->save( public_path('/uploads/avatars/' . $filename ) );
+
+    		$user = auth()->user();
+    		$user->avatar = $filename;
+    		$user->save();
+    	}
+
+    	return view('profile');
+
     }
 
 

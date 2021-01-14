@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Tag;
 
 
 class HomeController extends Controller
@@ -32,8 +33,10 @@ class HomeController extends Controller
 
         $categories = Category::withCount('posts')->orderByDesc('posts_count')->get()->take(5);
 
+        $tags = Tag::has('posts')->pluck('name');
+
         //error_log($posts);
-        return view('home', compact('posts', 'categories'));
+        return view('home', compact('posts', 'categories', 'tags'));
     }
 
     /**
@@ -73,7 +76,9 @@ class HomeController extends Controller
 
         $comments = Comment::all();
 
-        return view('profile', compact('users', 'posts', 'categories', 'comments'));
+        $user = auth()->user();
+
+        return view('profile', compact('user', 'users', 'posts', 'categories', 'comments'));
     }
     
 

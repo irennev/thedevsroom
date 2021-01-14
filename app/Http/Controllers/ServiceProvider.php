@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Tag;
 
 class ServiceProvider extends Controller
 {
@@ -25,6 +26,13 @@ class ServiceProvider extends Controller
         $categoryPostCount = Category::find($id)->posts()->count(); //Suggest:- it will return post counts along with user details
 
         return $categoryPostCount; // or $userPosts
+    }
+
+    public static function tagPosts($id)
+    {
+        $tagPostCount = Tag::find($id)->posts()->count(); //Suggest:- it will return post counts along with user details
+
+        return $tagPostCount; // or $userPosts
     }
 
     

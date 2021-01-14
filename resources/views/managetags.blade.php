@@ -3,7 +3,7 @@
 @section('content')
 
     <head>
-    <title>Manage users</title>
+    <title>Manage tags</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -22,7 +22,6 @@
         var actions = $("table td:last-child").html();
     });
 
-
     $(document).ready(function(){
     $("#myInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();
@@ -31,7 +30,6 @@
         });
     });
     });
-
 
     </script>
 </head>
@@ -42,33 +40,24 @@
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
-                                <div class="col-sm-8"><h2>Manage <b>Users</b></h2></div>
+                                <div class="col-sm-8"><h2>Manage <b>Tags</b></h2></div>
                                 <div class="col-sm-4">
                                     <div class="search-box">
                                         <input id="myInput" type="text" class="form-control" placeholder="Search&hellip;">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        @if(count($errors))
-                                <div class="form-group">
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach($errors->all() as $error)
-                                            <li>{{$error}}</li>
-                                        @endforeach
-                                    </ul>
+                            <div class="row">
+                                <div class="col-sm-8"></div>
+                                <div class="col-sm-4 pt-3">
+                                    <a href="{{ route('tags.create') }}" class="btn btn-success" style="float: right">Add Tag</a>
                                 </div>
                             </div>
-                        @endif
-
+                        </div>
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Is Admin</th>
                                     <th>No. Posts</th>
                                     <th>Action</th>
                                 </tr>
@@ -76,16 +65,14 @@
                             
                             <tbody id="myTable">
 
-                            @foreach($users as $user)
+                            @foreach($tags as $tag)
                                 <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->is_admin }}</td>
-                                     @inject('provider', 'App\Http\Controllers\ServiceProvider')
-                                    <td>{{ $provider::userPosts($user->id) }}</td>
+                                    <td>{{ $tag->name }}</td>
+                                    @inject('provider', 'App\Http\Controllers\ServiceProvider')
+                                    <td>{{ $provider::tagPosts($tag->id) }}</td>
                                     <td>
-                                        <a href ="#modal-edit-{{ $user->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#modal-delete-{{ $user->id }}" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a>
+                                        <a href ="#modal-edit-{{ $tag->id }}" class="edit" title="Edit" data-toggle="modal"><i class="material-icons">&#xE254;</i></a>
+                                        <a href="#modal-delete-{{ $tag->id }}" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -95,35 +82,27 @@
                 </div>
             </div>
             
-            @foreach($users as $user)
+            @foreach($tags as $tag)
             <!-- Edit Modal HTML -->
-            <div id="modal-edit-{{ $user->id }}" class="modal fade">
+            <div id="modal-edit-{{ $tag->id }}" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="{{ route('users.update', $user->id) }}" method="post">
+                        <form action="{{ route('tags.update', $tag->id) }}" method="post">
                             @csrf @method('PUT')
                             <div class="modal-header">						
-                                <h4 class="modal-title">Edit User</h4>
+                                <h4 class="modal-title">Edit Tag</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <input name="id" id="id" type="hidden" value ="{{$users}}" required>					
+                                <input name="id" id="id" type="hidden" value ="{{$tags}}" required>					
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input name="name" id="name" type="text" class="form-control" value ="{{$user->name}}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input name="email" id="email" type="text" class="form-control" value ="{{$user->email}}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Is Admin</label>
-                                    <input name="is_admin"  id="is_admin" type="text" class="form-control" value ="{{$user->is_admin}}" pattern="[0-1]+" required>
+                                    <input name="name" id="name" type="text" class="form-control" value ="{{$tag->name}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label>No. Posts</label>
                                     @inject('provider', 'App\Http\Controllers\ServiceProvider')
-                                    <input name="nr_posts" type="text" class="form-control" value ="{{ $provider::userPosts($user->id) }}" disabled>
+                                    <input name="no_posts" id="no_posts" type="text" class="form-control" value ="{{ $provider::tagPosts($tag->id) }}" disabled>
                                 </div>					
                             </div>
                             <div class="modal-footer">
@@ -135,17 +114,17 @@
                 </div>
             </div>
             <!-- Delete Modal HTML -->
-            <div id="modal-delete-{{ $user->id }}" class="modal fade">
+            <div id="modal-delete-{{ $tag->id }}" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="{{ route('users.destroy', $user->id) }}" method="post">
+                        <form action="{{ route('tags.destroy', $tag->id) }}" method="post">
                             @csrf @method('DELETE')
                             <div class="modal-header">						
-                                <h4 class="modal-title">Delete User</h4>
+                                <h4 class="modal-title">Delete Tag</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">					
-                                <p>Are you sure you want to delete "{{$user->name}}" user?</p>
+                                <p>Are you sure you want to delete "{{ $tag->name }}" category?</p>
                                 <p class="text-warning"><small>This action cannot be undone.</small></p>
                             </div>
                             <div class="modal-footer">

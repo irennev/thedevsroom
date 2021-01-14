@@ -34,6 +34,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="label">Add up to 5 tags separated by comma:</label>
+                            <input type="text" name="tagsList" class="form-control" required/>
+                        </div>
+
+                        <div class="form-group">
                             <input type="submit" class="btn btn-success" />
                         </div>
                     </form>

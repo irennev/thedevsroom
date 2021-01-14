@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'TheDevsRoom') }}</title>
+    <title>{{ config('app.name', 'The Devs Room') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -23,7 +23,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand">
                     {{ config('app.name', 'The Devs Room') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -66,9 +66,12 @@
                                 <button class="btn btn-sm btn-outline-success mr-2" type="submit">Search</button>
                                 <input type="text" name="search" class="form-control form-control-sm" placeholder="Search" aria-label="Search">
                             </form>
-
+                            <div>
+                            </div>
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:relative; padding-left:50px;" v-pre>
+                                <img src="/uploads/avatars/{{ Auth::user()->avatar }}" style="width:32px; height:32px; bottom:5px; position:absolute; left:10px; border-radius:50%"> 
                                     {{ Auth::user()->name }}
                                 </a>
 

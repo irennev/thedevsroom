@@ -48,6 +48,19 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if(count($errors))
+                                <div class="form-group">
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
+
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
@@ -103,9 +116,18 @@
                                     <label>Body</label>
                                     <textarea name="body" id="body" class="form-control" required>{{$post->body}}</textarea>
                                 </div>
+
                                 <div class="form-group">
-                                    <label>Cadegory id</label>
-                                    <input name="category_id"  id="category_id" type="text" class="form-control" value ="{{$post->category_id}}" required>
+                                    <label class="label">Article Category: </label>
+
+                                    <select name="category_id" class="form-control" required>
+
+                                        @foreach($categories as $category)
+
+                                        <option value ="{{ $category->id }}" >{{ $category->name }}</option>
+
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Visits</label>

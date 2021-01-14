@@ -47,6 +47,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-8"></div>
+                                <div class="col-sm-4 pt-3">
+                                    <a href="{{ route('categories.create') }}" class="btn btn-success" style="float: right">Add Category</a>
+                                </div>
+                            </div>
                         </div>
                         <table id="example" class="table table-bordered">
                             <thead>
@@ -96,7 +102,7 @@
                                 <div class="form-group">
                                     <label>No. Posts</label>
                                     @inject('provider', 'App\Http\Controllers\ServiceProvider')
-                                    <input name="no_posts" id="no_posts" type="text" class="form-control" value ="$provider::categoryPosts($category->id)" disabled>
+                                    <input name="no_posts" id="no_posts" type="text" class="form-control" value ="{{ $provider::categoryPosts($category->id) }}" disabled>
                                 </div>					
                             </div>
                             <div class="modal-footer">

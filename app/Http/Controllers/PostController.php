@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -48,14 +49,28 @@ class PostController extends Controller
     	$request->validate([
             'title'=>'required',
             'body'=>'required',
-            'category_id'=>'required',
+            'category_id'=>'required|exists:categories,category_id',
+            'tagsList' => 'required'
         ]);
 
         $input = $request->all();
 
         $input['user_id'] = auth()->user()->id;
 
-        Post::create($input);
+        $post = Post::create($input);
+
+        $tagsList = explode(',', $request->tagsList);
+
+        foreach($tagsList as $tag)
+        {
+            if($tag = Tag::firstOrCreate([
+                'name' => strtolower(trim($tag))
+            ])){
+                $newTags[] = $tag->id;
+            }
+        }
+
+        $post->tags()->attach($newTags);
 
         return redirect()->route('home');
 
@@ -133,7 +148,8 @@ class PostController extends Controller
     public function adminManagePosts()
     {
         $posts = Post::all();
+        $categories = Category::all();
 
-        return view('manageposts', compact('posts'));
+        return view('manageposts', compact('posts', 'categories'));
     }
 }

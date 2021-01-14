@@ -10,6 +10,5 @@ $factory->define(Tag::class, function (Faker $faker) {
 
     return [
         "name" => $name,
-        "slug" => \Illuminate\Support\Str::slug($name)
     ];
 });
